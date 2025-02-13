@@ -10,7 +10,7 @@ export type QuizQuestionType = {
 }
 
 export type QuizType = {
-    key: number;
+    id: number;
     name: string;
     questions: QuizQuestionType[];
 }

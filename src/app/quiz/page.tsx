@@ -2,19 +2,26 @@
 
 import styles from './Quiz.module.css';
 import React, { useContext, useEffect } from "react";
-import QQViewer from "@/components/QQViewer"; // Adjust the import path as necessary
+import {QViewer, QViewerProps} from "@/components/QViewer"; // Adjust the import path as necessary
 import { QuizQuestionType, QuizType, QuizContextType, QuizContext } from "@/context/QuizContext";
 
+export type QViewerProps = {
+    id: number;
+    name: string;
+    questions: QQViewerProps[];
+}
 
 function Quiz(): React.JSX.Element {
     const context = useContext(QuizContext);
     if(!context) throw new Error("No defined Quiz context");
+    const currentQuiz = context.quizzes[0];
 
     // const qq = context?.quizzes[0]?.questions[0];
 
-    const allQQ = context?.quizzes[0]?.questions.map((question) => {
-        return <QQViewer key={question.id} {...question}/>;
-    });
+    // const allQQ = context?.quizzes[0]?.questions.map((question) => {
+    //     return <QQViewer key={question.id} {...question}/>;
+    // });
+
     // const elements = quiz.questions.map((question) => {
     //     return [
     //         <h2 key={`question-${question.id}`}>{question.question}</h2>,
@@ -29,9 +36,8 @@ function Quiz(): React.JSX.Element {
 
     return (
         <div className={styles.quizContainer}>
-            <h1>Quizzes</h1>
-            {/* {elements} */}
-            {allQQ}
+            {/* <h1>Quizzes</h1> */}
+            <QViewer {...currentQuiz}/>
         </div>
     )
 }
