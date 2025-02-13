@@ -1,2 +1,2 @@
-# Workshop-v7
+# workshop-v7
 Workshop v7 QuizApp
