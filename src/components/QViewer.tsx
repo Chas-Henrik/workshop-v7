@@ -8,7 +8,7 @@ export type QViewerProps = {
     id: number;
     name: string;
     questions: QQViewerProps[];
-    submitTestHandler: ( questions: QQViewerProps[], resultsArr: number[] ) => void;
+    submitTestHandler: ( questions: QViewerProps, resultsArr: number[] ) => void;
 }
 
 export function QViewer(props: QViewerProps): React.JSX.Element {
@@ -17,8 +17,6 @@ export function QViewer(props: QViewerProps): React.JSX.Element {
     const maxIndex = questionsArr ? (questionsArr?.length - 1): 0;
     const [ resultsArr, setResultsArr] = useState(questionsArr ? new Array(questionsArr.length).fill(-1): []); // Array to store the selected radio buttons
     const currentQuestion = questionsArr && { ...questionsArr[currentIndex], selectRadioButtonHandler, selectedAnswer: resultsArr[currentIndex] }; // Current question object
-
-    console.log("resultsArr", resultsArr);
 
     function selectRadioButtonHandler(questionId: number, selectedAns: number) {
         setResultsArr((prevResultsArr) => {
@@ -29,13 +27,12 @@ export function QViewer(props: QViewerProps): React.JSX.Element {
     }
 
     function submitHandler() {
-        console.log("submitHandler", resultsArr);
         if(resultsArr.includes(-1)) {
             if(!confirm("You have not answered all questions. Do you want to submit anyway?")){
                 return;
             }
         }
-        props.submitTestHandler(questionsArr, resultsArr);
+        props.submitTestHandler(props, resultsArr);
     }	
 
 

@@ -4,7 +4,8 @@ import styles from './Quiz.module.css';
 import React, { useContext, useState, useEffect } from "react";
 import {QViewer, QViewerProps} from "@/components/QViewer"; // Adjust the import path as necessary
 import { QList } from "@/components/QList"; // Adjust the import path as necessary
-import { QuizQuestionType, QuizType, QuizContext } from "@/context/QuizContext";
+import { QResult } from "@/components/QResult"; // Adjust the import path as necessary
+import { QuizType, QuizContext } from "@/context/QuizContext";
 
 enum QuizStatus {
     Selecting,
@@ -15,8 +16,9 @@ enum QuizStatus {
 function Quiz(): React.JSX.Element {
     const context = useContext(QuizContext);
     if(!context) throw new Error("No defined Quiz context");
-    const [quizStatus, setQuizStatus] = useState(QuizStatus.Selecting);
-    const [currentQuiz, setCurrentQuiz] = useState(context?.quizzes[0]);
+    const [quizStatus, setQuizStatus] = useState<QuizStatus>(QuizStatus.Selecting);
+    const [currentQuiz, setCurrentQuiz] = useState<QuizType>(context?.quizzes[0]);
+    const [score, setScore] = useState<number>(0);
     const currentQuizMapped: QViewerProps = currentQuiz ?{
         ...currentQuiz,
         questions: currentQuiz.questions.map(q => ({
@@ -26,6 +28,7 @@ function Quiz(): React.JSX.Element {
         })),
         submitTestHandler: submitTestHandler
     }: {id: 0, name: "", questions: [], submitTestHandler: submitTestHandler};
+
 
     useEffect(() => {
         console.log("quiz useEffect");
@@ -37,16 +40,24 @@ function Quiz(): React.JSX.Element {
         setQuizStatus(QuizStatus.Running);
     }
 
-    function submitTestHandler(questions: QuizQuestionType[], resultsArr: number[]) {
+    function submitTestHandler(quiz: QuizType, resultsArr: number[]) {
         // Implement the submit test handler logic here
-        console.log("Submit test handler called", questions, resultsArr);
+        const score:number = quiz.questions?.reduce((acc, item, index) => {
+            return acc + (item.alternatives[resultsArr[index]] === item.correctAnswer ? 1 : 0);
+        }, 0);
+        setScore(score);
         setQuizStatus(QuizStatus.Completed);
     };
+
+    function restartTestHandler() {
+        setQuizStatus(QuizStatus.Selecting);
+    }
 
     return (
         <div className={styles.quizContainer}>
             {quizStatus===QuizStatus.Selecting && <QList quizzes={context.quizzes} selectQuizHandler={selectQuizHandler}/>}
             {quizStatus===QuizStatus.Running && <QViewer {...currentQuizMapped} submitTestHandler={submitTestHandler}/>}
+            {quizStatus===QuizStatus.Completed && <QResult name={currentQuizMapped.name} score={score} maxScore={currentQuizMapped.questions?.length} restartTestHandler={restartTestHandler}/>}
         </div>
     )
 }
