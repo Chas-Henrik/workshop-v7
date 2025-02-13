@@ -10,31 +10,31 @@ function Admin(): React.JSX.Element {
 
     const quizQuestionArray: QuizQuestionType[] = [
         { 
-            id: 1,
+            id: 0,
             question: "What is the capital of France?", 
             alternatives: ["Stockholm", "New York", "Paris", "London"],
             correctAnswer: "Paris" 
         },
         { 
-            id: 2,
+            id: 1,
             question: "What is the capital of Spain?", 
             alternatives: ["Madrid", "New York", "Paris", "London"],
             correctAnswer: "Madrid" 
         },
         { 
-            id: 3,
+            id: 2,
             question: "What is the capital of Italy?", 
             alternatives: ["Stockholm", "Rome", "Paris", "London"],
             correctAnswer: "Rome" 
         },
         {
-            id: 4,
+            id: 3,
             question: "What is the capital of Germany?", 
             alternatives: ["Stockholm", "New York", "Berlin", "London"],
             correctAnswer: "Berlin" 
         },
         {
-            id: 5,
+            id: 4,
             question: "What is the capital of Portugal?", 
             alternatives: ["Stockholm", "New York", "Paris", "Lisbon"],
             correctAnswer: "Lisbon" 

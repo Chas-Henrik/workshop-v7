@@ -8,27 +8,45 @@ export type QViewerProps = {
     id: number;
     name: string;
     questions: QQViewerProps[];
+    submitTestHandler: ( questions: QQViewerProps[], resultsArr: number[] ) => void;
 }
 
-export function QViewer(props:QViewerProps): React.JSX.Element {
-    const [ currentIndex, setCurrentIndex ] = useState(0);
-    const [ selectedRadioBtn, setSelectedRadioBtn ] = useState(-1);
-    const maxIndex = props.questions ? (props.questions?.length - 1): 0;
-    const currentQuestion = {...props?.questions[currentIndex], selectedRadio};
+export function QViewer(props: QViewerProps): React.JSX.Element {
+    const [ currentIndex, setCurrentIndex ] = useState(0);          // Index of the current question
+    const questionsArr: QQViewerProps[] = props?.questions;
+    const maxIndex = questionsArr ? (questionsArr?.length - 1): 0;
+    const [ resultsArr, setResultsArr] = useState(questionsArr ? new Array(questionsArr.length).fill(-1): []); // Array to store the selected radio buttons
+    const currentQuestion = questionsArr && { ...questionsArr[currentIndex], selectRadioButtonHandler, selectedAnswer: resultsArr[currentIndex] }; // Current question object
 
-    function selectedRadio(selectedAns: number) {
-        console.log(`Selected radio: ${id}`);
-        setSelectedRadioBtn(selectedAns);
+    console.log("resultsArr", resultsArr);
+
+    function selectRadioButtonHandler(questionId: number, selectedAns: number) {
+        setResultsArr((prevResultsArr) => {
+            const newResultsArr = [...prevResultsArr];
+            newResultsArr[questionId] = selectedAns;
+            return newResultsArr;
+        });
     }
+
+    function submitHandler() {
+        console.log("submitHandler", resultsArr);
+        if(resultsArr.includes(-1)) {
+            if(confirm("You have not answered all questions. Do you want to submit anyway?")){
+                props.submitTestHandler(questionsArr, resultsArr);
+            }
+        }
+    }	
+
 
     return (
         <article className={styles.QViewer}>
-            <h2>{props.name}</h2>
+            <h2 className={styles.header}>{props?.name}</h2>
             <QQViewer {...currentQuestion} />
             <div className={styles.buttons}>
-                <button className={styles.button} onClick={() => setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex))}>Prev</button>
-                <button className={styles.button} onClick={() => setCurrentIndex((prevIndex) => (prevIndex < maxIndex ? prevIndex + 1 : prevIndex))}>Next</button>
+                {(currentIndex > 0) && <button className={styles.button} onClick={() => setCurrentIndex((prevIndex) =>  prevIndex - 1 )}>Prev</button>}
+                {(currentIndex < maxIndex) && <button className={styles.button} onClick={() => setCurrentIndex((prevIndex) => prevIndex + 1 )}>Next</button>}
             </div>
+            <button className={styles.submitButton} onClick={submitHandler}>Submit</button>
         </article>
     )
 }
