@@ -1,50 +1,52 @@
 "use client"
 
 import styles from './Quiz.module.css';
-import React, { useContext, useEffect } from "react";
-import {QQViewerProps} from "@/components/QQViewer"; // Adjust the import path as necessary
+import React, { useContext, useState, useEffect } from "react";
 import {QViewer, QViewerProps} from "@/components/QViewer"; // Adjust the import path as necessary
-import { QuizQuestionType, QuizType, QuizContextType, QuizContext } from "@/context/QuizContext";
+import { QList } from "@/components/QList"; // Adjust the import path as necessary
+import { QuizQuestionType, QuizType, QuizContext } from "@/context/QuizContext";
 
-export type QViewerProps = {
-    id: number;
-    name: string;
-    questions: QQViewerProps[];
-    submitTestHandler: ( questions: QQViewerProps[], resultsArr: number[] ) => void;
+enum QuizStatus {
+    Selecting,
+    Running,
+    Completed,
 }
 
 function Quiz(): React.JSX.Element {
     const context = useContext(QuizContext);
     if(!context) throw new Error("No defined Quiz context");
-    const currentQuiz = context.quizzes[0];
-
-    // const qq = context?.quizzes[0]?.questions[0];
-
-    // const allQQ = context?.quizzes[0]?.questions.map((question) => {
-    //     return <QQViewer key={question.id} {...question}/>;
-    // });
-
-    // const elements = quiz.questions.map((question) => {
-    //     return [
-    //         <h2 key={`question-${question.id}`}>{question.question}</h2>,
-    //         <ul key={`alternatives-${question.id}`}>{question.alternatives.map((item, index) => <li key={`${question.id}${index}`}>{item}</li>)}</ul>,
-    //         <p key={`answer-${question.id}`}>{question.correctAnswer}</p>
-    //     ];
-    // });
+    const [quizStatus, setQuizStatus] = useState(QuizStatus.Selecting);
+    const [currentQuiz, setCurrentQuiz] = useState(context?.quizzes[0]);
+    const currentQuizMapped: QViewerProps = currentQuiz ?{
+        ...currentQuiz,
+        questions: currentQuiz.questions.map(q => ({
+            ...q,
+            selectedAnswer: -1,
+            selectRadioButtonHandler: () => {}
+        })),
+        submitTestHandler: submitTestHandler
+    }: {id: 0, name: "", questions: [], submitTestHandler: submitTestHandler};
 
     useEffect(() => {
         console.log("quiz useEffect");
     }, []);
 
-    const submitTestHandler = (questions: QuizQuestionType[], resultsArr: number[]) => {
+    function selectQuizHandler(quiz: QuizType) {
+        console.log("selectQuizHandler", quiz);
+        setCurrentQuiz(quiz);
+        setQuizStatus(QuizStatus.Running);
+    }
+
+    function submitTestHandler(questions: QuizQuestionType[], resultsArr: number[]) {
         // Implement the submit test handler logic here
         console.log("Submit test handler called", questions, resultsArr);
+        setQuizStatus(QuizStatus.Completed);
     };
 
     return (
         <div className={styles.quizContainer}>
-            {/* <h1>Quizzes</h1> */}
-            <QViewer {...currentQuiz} submitTestHandler={submitTestHandler}/>
+            {quizStatus===QuizStatus.Selecting && <QList quizzes={context.quizzes} selectQuizHandler={selectQuizHandler}/>}
+            {quizStatus===QuizStatus.Running && <QViewer {...currentQuizMapped} submitTestHandler={submitTestHandler}/>}
         </div>
     )
 }

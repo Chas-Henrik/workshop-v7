@@ -31,10 +31,11 @@ export function QViewer(props: QViewerProps): React.JSX.Element {
     function submitHandler() {
         console.log("submitHandler", resultsArr);
         if(resultsArr.includes(-1)) {
-            if(confirm("You have not answered all questions. Do you want to submit anyway?")){
-                props.submitTestHandler(questionsArr, resultsArr);
+            if(!confirm("You have not answered all questions. Do you want to submit anyway?")){
+                return;
             }
         }
+        props.submitTestHandler(questionsArr, resultsArr);
     }	
 
 
