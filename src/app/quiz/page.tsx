@@ -2,6 +2,7 @@
 
 import styles from './Quiz.module.css';
 import React, { useContext, useEffect } from "react";
+import {QQViewerProps} from "@/components/QQViewer"; // Adjust the import path as necessary
 import {QViewer, QViewerProps} from "@/components/QViewer"; // Adjust the import path as necessary
 import { QuizQuestionType, QuizType, QuizContextType, QuizContext } from "@/context/QuizContext";
 
@@ -9,6 +10,7 @@ export type QViewerProps = {
     id: number;
     name: string;
     questions: QQViewerProps[];
+    submitTestHandler: ( questions: QQViewerProps[], resultsArr: number[] ) => void;
 }
 
 function Quiz(): React.JSX.Element {
@@ -34,10 +36,15 @@ function Quiz(): React.JSX.Element {
         console.log("quiz useEffect");
     }, []);
 
+    const submitTestHandler = (questions: QuizQuestionType[], resultsArr: number[]) => {
+        // Implement the submit test handler logic here
+        console.log("Submit test handler called", questions, resultsArr);
+    };
+
     return (
         <div className={styles.quizContainer}>
             {/* <h1>Quizzes</h1> */}
-            <QViewer {...currentQuiz}/>
+            <QViewer {...currentQuiz} submitTestHandler={submitTestHandler}/>
         </div>
     )
 }

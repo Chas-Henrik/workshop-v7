@@ -43,8 +43,8 @@ export function QViewer(props: QViewerProps): React.JSX.Element {
             <h2 className={styles.header}>{props?.name}</h2>
             <QQViewer {...currentQuestion} />
             <div className={styles.buttons}>
-                {(currentIndex > 0) && <button className={styles.button} onClick={() => setCurrentIndex((prevIndex) =>  prevIndex - 1 )}>Prev</button>}
-                {(currentIndex < maxIndex) && <button className={styles.button} onClick={() => setCurrentIndex((prevIndex) => prevIndex + 1 )}>Next</button>}
+                {<button className={styles.button} onClick={() => setCurrentIndex((prevIndex) =>  prevIndex - 1 )} disabled = {currentIndex <= 0}>Prev</button>}
+                {<button className={styles.button} onClick={() => setCurrentIndex((prevIndex) => prevIndex + 1 )}  disabled = {currentIndex >= maxIndex}>Next</button>}
             </div>
             <button className={styles.submitButton} onClick={submitHandler}>Submit</button>
         </article>
