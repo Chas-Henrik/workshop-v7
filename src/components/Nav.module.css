@@ -1,0 +1,20 @@
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 1rem;
+    > .liItem {
+        list-style: none;
+        width: 7rem;
+        height: fit-content;
+        padding: 0.5em 1em;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        background-color: #ddd;
+    }
+}
