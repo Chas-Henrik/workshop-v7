@@ -8,7 +8,7 @@ export type QViewerProps = {
     id: number;
     name: string;
     questions: QQViewerProps[];
-    submitTestHandler: ( questions: QViewerProps, resultsArr: number[] ) => void;
+    submitTestHandler?: ( questions: QViewerProps, resultsArr: number[] ) => void;
 }
 
 export function QViewer(props: QViewerProps): React.JSX.Element {
@@ -32,7 +32,9 @@ export function QViewer(props: QViewerProps): React.JSX.Element {
                 return;
             }
         }
-        props.submitTestHandler(props, resultsArr);
+        if (props.submitTestHandler) {
+            props.submitTestHandler(props, resultsArr);
+        }
     }	
 
 

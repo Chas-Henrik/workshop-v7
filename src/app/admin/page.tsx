@@ -155,42 +155,6 @@ function Admin(): React.JSX.Element {
         },
         {
         id: 4,
-        name: "Geography",
-        questions: [
-            { 
-                id: 0,
-                question: "What is the capital of France?", 
-                alternatives: ["Stockholm", "New York", "Paris", "London"],
-                correctAnswer: "Paris"
-            },
-            { 
-                id: 1,
-                question: "What is the capital of Spain?", 
-                alternatives: ["Madrid", "New York", "Paris", "London"],
-                correctAnswer: "Madrid"
-            },
-            { 
-                id: 2,
-                question: "What is the capital of Italy?", 
-                alternatives: ["Stockholm", "Rome", "Paris", "London"],
-                correctAnswer: "Rome"
-            },
-            {
-                id: 3,
-                question: "What is the capital of Germany?", 
-                alternatives: ["Stockholm", "New York", "Berlin", "London"],
-                correctAnswer: "Berlin"
-            },
-            {
-                id: 4,
-                question: "What is the capital of Portugal?", 
-                alternatives: ["Stockholm", "New York", "Paris", "Lisbon"],
-                correctAnswer: "Lisbon"
-            }
-        ]
-        },
-        {
-        id: 5,
         name: "Literature",
         questions: [
             { 

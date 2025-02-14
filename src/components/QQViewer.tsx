@@ -7,9 +7,9 @@ export type QQViewerProps = {
     id: number;
     question: string;
     alternatives: string[];
-    selectedAnswer: number;
     correctAnswer: string;
-    selectRadioButtonHandler: (questionId: number, selectedAns: number) => void;
+    selectedAnswer?: number;
+    selectRadioButtonHandler?: (questionId: number, selectedAns: number) => void;
 }
 
 export function QQViewer(props:QQViewerProps): React.JSX.Element {
@@ -20,7 +20,7 @@ export function QQViewer(props:QQViewerProps): React.JSX.Element {
             <ul>{props && props.alternatives?.map((item, index) => 
                 <li className={styles.listItem} key={`${props.id}${index}`}>
                     <input className={styles.listItemInput} id={`${index}`} 
-                        onChange={() => props.selectRadioButtonHandler(props.id, index)} 
+                        onChange={() => props.selectRadioButtonHandler && props.selectRadioButtonHandler(props.id, index)} 
                         name={`Question${props.id}`} 
                         type="radio"
                         checked={props.selectedAnswer === index}

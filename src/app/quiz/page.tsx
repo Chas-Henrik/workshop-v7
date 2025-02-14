@@ -18,18 +18,8 @@ function Quiz(): React.JSX.Element {
     if(!context) throw new Error("No defined Quiz context");
     const [quizStatus, setQuizStatus] = useState<QuizStatus>(QuizStatus.Selecting);
     const [currentQuiz, setCurrentQuiz] = useState<QuizType>(context?.quizzes[0]);
-    const [score, setScore] = useState<number>(0);
-    const currentQuizMapped: QViewerProps = currentQuiz ?{
-        ...currentQuiz,
-        questions: currentQuiz.questions.map(q => ({
-            ...q,
-            selectedAnswer: -1,
-            selectRadioButtonHandler: () => {}
-        })),
-        submitTestHandler: submitTestHandler
-    }: {id: 0, name: "", questions: [], submitTestHandler: submitTestHandler};
-
-
+    const [ resultsArr, setResultsArr] = useState<number[]>([]);
+    console.log("resultsArr",resultsArr);
     useEffect(() => {
         console.log("quiz useEffect");
     }, []);
@@ -41,11 +31,8 @@ function Quiz(): React.JSX.Element {
     }
 
     function submitTestHandler(quiz: QuizType, resultsArr: number[]) {
-        // Implement the submit test handler logic here
-        const score:number = quiz.questions?.reduce((acc, item, index) => {
-            return acc + (item.alternatives[resultsArr[index]] === item.correctAnswer ? 1 : 0);
-        }, 0);
-        setScore(score);
+        setResultsArr([...resultsArr]);
+        setCurrentQuiz({...quiz});
         setQuizStatus(QuizStatus.Completed);
     };
 
@@ -56,8 +43,8 @@ function Quiz(): React.JSX.Element {
     return (
         <div className={styles.quizContainer}>
             {quizStatus===QuizStatus.Selecting && <QList quizzes={context.quizzes} selectQuizHandler={selectQuizHandler}/>}
-            {quizStatus===QuizStatus.Running && <QViewer {...currentQuizMapped} submitTestHandler={submitTestHandler}/>}
-            {quizStatus===QuizStatus.Completed && <QResult name={currentQuizMapped.name} score={score} maxScore={currentQuizMapped.questions?.length} restartTestHandler={restartTestHandler}/>}
+            {quizStatus===QuizStatus.Running && <QViewer {...currentQuiz} submitTestHandler={submitTestHandler}/>}
+            {quizStatus===QuizStatus.Completed && <QResult {...currentQuiz} resultsArr={resultsArr} restartTestHandler={restartTestHandler}/>}
         </div>
     )
 }
